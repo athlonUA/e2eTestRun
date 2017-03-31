@@ -1,0 +1,18 @@
+machine:
+  node:
+    version: 6.10.1
+
+general:
+  build_dir: project
+
+dependencies:
+  override:
+    - npm install -g @angular/cli
+
+test:
+  post:
+    - ./circle-build-project.sh
+    - ./circle-server-run.sh:
+        background: true
+    - sleep 15
+    - ./circle-tests-run.sh
