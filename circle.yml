@@ -1,18 +1,23 @@
 machine:
   node:
-    version: 6.10.1
-
-general:
-  build_dir: project
+    version: 6.10.2
+  pre:
+   - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+   - sudo pip install 'docker-compose==1.8.0'
+  services:
+    - docker
 
 dependencies:
+  pre:
+    - cp docker/nginx/nginx.conf.dist docker/nginx/nginx.conf
+    - cp docker-compose.override.yml.dist docker-compose.override.yml
+
   override:
-    - npm install -g @angular/cli
+    - docker-compose up -d
+    - docker-compose run -u `id -u $USER` nodejs npm install
+    - docker-compose run -u `id -u $USER` nodejs npm run prod-circleci
+    - mv project/application/circleci_dist project/application/dist
 
 test:
-  post:
-    - ./circle-build-project.sh
-    - ./circle-server-run.sh:
-        background: true
-    - sleep 15
-    - ./circle-tests-run.sh
+  override:
+    - cd project/application && npm run e2e

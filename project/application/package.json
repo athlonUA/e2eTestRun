@@ -5,8 +5,9 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "prod": "npm install --no-optional && ng build --prod",
-    "start": "npm install --no-optional && ng serve",
+    "prod": "ng build --prod --no-sourcemap",
+    "prod-circleci": "ng build --prod --no-sourcemap && cp -r dist circleci_dist",
+    "start": "ng serve",
     "test": "ng test",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor"

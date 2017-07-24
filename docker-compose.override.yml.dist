@@ -1,0 +1,7 @@
+nodejs:
+    ports:
+        - 4200:4200
+
+nginx:
+    ports:
+        - 80:80
